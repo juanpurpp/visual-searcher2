@@ -40,3 +40,12 @@ class Node:
     row, col = self.getState()
     if self.problem[row][col] == 'g': return True
     else: return False
+
+  def getPathToStart(self):
+
+    result = []
+    current = self.getFather()
+    while current is not None:
+      result.append(current.getState())
+      current = current.getFather()
+    return result

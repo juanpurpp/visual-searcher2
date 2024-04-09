@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Chat</title>
+		<title>Searcher</title>
 		<script src="https://cdn.tailwindcss.com"></script>
 		<script>
 			var ws = new WebSocket("ws://localhost:8000/ws");
@@ -12,12 +12,21 @@
 				const oldPos = document.getElementById(`i-${data.oldRow}-${data.oldCol}`)
 				newPos.className= data.finished ? 'w-4 h-4 bg-green-600' : 'w-4 h-4 bg-blue-400'
 				if(oldPos) oldPos.className='w-4 h-4 bg-yellow-400'
+				if(data.finished == true){
+					console.log('finished')
+					for(pos of data.path){
+						console.log(pos)
+						const pathUnit = document.getElementById(`i-${pos[0]}-${pos[1]}`)
+						pathUnit.className= 'w-4 h-4 bg-lime-300 p-1'
+					}
+				}
 				//if(data.finished) ws.close()
 			};
-			function sendStart(event) {
+			function sendStart(event){
 				var delay = document.getElementById("delay")
 				ws.send(JSON.stringify({action: 'start', delay: parseFloat(delay.value) }))
 				event.preventDefault()
+
 			}
 		</script>
 	</head>
@@ -25,13 +34,13 @@
 		<div class="w-screen flex flex-col justify-start items-center">
 			<h1 class="text-2xl text-slate-700 font-semibold">Visual Maze Solution Searcher v2 by Juanpurpp</h1>
 			<div class="w-full flex flex-row p-4">
-				<div class="w-full bg-blue-100 p-2 rounded-md border-2 border-sky-200 justify-center items-center">
+				<div id="maze" class="w-full bg-blue-100 p-2 rounded-md border-2 border-sky-200 justify-center items-center">
 					{{#list}} {{/list}}
 				</div>
 				<form class="w-full flex flex-col space-y-2" action="" onsubmit="sendStart(event)">
 					<div class="w-full flex flex-row justify-center items-center">
 						<p>Delay: </p>
-						<input class="m-1 p-0.5 rounded-md border-2 border-slate-400" type="number" id="delay" value="0.1" min="0" max="50" step="0.01" required autocomplete="off"/>
+						<input class="m-1 p-0.5 rounded-md border-2 border-slate-400" type="number" id="delay" value="0.001" min="0" max="50" step="0.0001" required autocomplete="off"/>
 					</div>
 					<button>Start</button>
 				</form>

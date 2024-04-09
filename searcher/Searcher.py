@@ -6,7 +6,6 @@ class Searcher:
     self.problem = problem
 
   def getInitialPos(self):
-    print(self.problem)
     for row_num, row in enumerate(self.problem):
       if 'i' in row:
         col_num = row.index('i')
@@ -15,7 +14,7 @@ class Searcher:
 
   def isSaved(self, saved, state):
     for old in saved:
-      if old[0] == state[0] and old[1] == state[1]: return True
+      if old.getState() == state.getState(): return True
     return False
 
   async def startLinearDepth(self, onIteration, delay=0.2):
@@ -27,13 +26,17 @@ class Searcher:
     current = Node(self.problem, row_num, col_num, None)
     while not current.isGoal():
       oldRow, oldCol = current.getState()
-      saved.append( current.getState()) 
+      saved.append( current) 
       await sleep(delay)
       for choice in current.getChoices():
-        if not self.isSaved(saved,choice) : stack.append(choice)
-      new_row, new_col = stack.pop()
-      current = Node(self.problem, new_row, new_col, current)
-      await onIteration(json.dumps({"row":new_row, "col": new_col, "oldRow": oldRow , "oldCol": oldCol, "finished": current.isGoal()}),)
+        new_node = Node(self.problem, choice[0], choice[1], current)
+        if not self.isSaved(saved,new_node) : stack.append(new_node)
+      current = stack.pop()
+      new_row, new_col = current.getState()
+      path = []
+      if(current.isGoal()): path = current.getPathToStart()
+
+      await onIteration(json.dumps({"row":new_row, "col": new_col, "oldRow": oldRow , "oldCol": oldCol, "finished": current.isGoal(), "path": path}),)
 
   async def startDepth(self, onIteration, delay):
     return await self.startLinearDepth( onIteration, delay)
