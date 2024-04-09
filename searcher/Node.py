@@ -56,8 +56,6 @@ class Node:
     right = [row, col +1]
     down = [row + 1, col]
     left = [row, col-1]
-    print('current pos')
-    print(row, col)
     #up
     if self.movementDoesntBreakRules(*up):
       this_choice_distance = self.getDistanceFrom(*up, targetRow, targetCol)
@@ -94,10 +92,9 @@ class Node:
           children = children[:index] + [{"coords": left,"distance": this_choice_distance}] + children[index:]
           inserted = True
       if len(children) == 0 or not inserted: children.append({"coords": left,"distance": this_choice_distance})
-    print(children)
+      
     children = list(map(lambda choice: choice['coords'], children))
-    print(children)
-    print('ter--------------------------------------------------------')
+
     return children
     
   
