@@ -41,6 +41,66 @@ class Node:
     if self.problem[row][col] == 'g': return True
     else: return False
 
+  def getDistanceFrom( self, targetRow, targetCol ):
+    return (( ( self.row - targetRow)**2 ) + ( (self.col - targetCol)**2 )  )**0.5
+
+  def getDistanceFrom (self, row, col, targetRow, targetCol):
+    print('row, col')
+    print(row,col)
+    return (( ( row - targetRow )**2 ) + ( ( col - targetCol )**2 )  )**0.5
+  
+  def getOrderedChoicesByDistanceTo(self, targetRow, targetCol):
+    row, col = self.getState()
+    children = []
+    up = [row - 1, col]
+    right = [row, col +1]
+    down = [row + 1, col]
+    left = [row, col-1]
+    print('current pos')
+    print(row, col)
+    #up
+    if self.movementDoesntBreakRules(*up):
+      this_choice_distance = self.getDistanceFrom(*up, targetRow, targetCol)
+      inserted = False
+      for index,listed in enumerate(children):
+        if this_choice_distance > listed['distance']:
+          children = children[:index] + [{"coords": up,"distance": this_choice_distance}]+ children[index:]
+          inserted = True
+      if len(children) == 0 or not inserted: children.append({"coords": up,"distance": this_choice_distance})
+    #right
+    if self.movementDoesntBreakRules(*right):
+      inserted = False
+      this_choice_distance = self.getDistanceFrom(*right, targetRow, targetCol)
+      for index,listed in enumerate(children):
+        if this_choice_distance > listed['distance']:
+          children = children[:index] + [ {"coords": right,"distance": this_choice_distance}] + children[index:]
+          inserted = True
+      if len(children) == 0 or not inserted: children.append({"coords": right,"distance": this_choice_distance})
+    #down
+    if self.movementDoesntBreakRules(*down):
+      inserted = False
+      this_choice_distance = self.getDistanceFrom(*down, targetRow, targetCol)
+      for index,listed in enumerate(children):
+        if this_choice_distance > listed['distance']:
+          children = children[:index] + [{"coords": down,"distance": this_choice_distance}] + children[index:]
+          inserted = True
+      if len(children) == 0 or not inserted: children.append({"coords": down,"distance": this_choice_distance})
+    #left
+    if self.movementDoesntBreakRules(*left):
+      inserted = False
+      this_choice_distance = self.getDistanceFrom(*left, targetRow, targetCol)
+      for index,listed in enumerate(children):
+        if this_choice_distance > listed['distance']:
+          children = children[:index] + [{"coords": left,"distance": this_choice_distance}] + children[index:]
+          inserted = True
+      if len(children) == 0 or not inserted: children.append({"coords": left,"distance": this_choice_distance})
+    print(children)
+    children = list(map(lambda choice: choice['coords'], children))
+    print(children)
+    print('ter--------------------------------------------------------')
+    return children
+    
+  
   def getPathToStart(self):
 
     result = []

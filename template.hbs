@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>Searcher</title>
-		<script src="https://cdn.tailwindcss.com"></script>
+		<script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
 		<script>
 			var ws = new WebSocket("ws://localhost:8000/ws");
 			ws.onmessage = function(event) {
@@ -15,7 +15,6 @@
 				if(data.finished == true){
 					console.log('finished')
 					for(pos of data.path){
-						console.log(pos)
 						const pathUnit = document.getElementById(`i-${pos[0]}-${pos[1]}`)
 						pathUnit.className= 'w-4 h-4 bg-lime-300 p-1'
 					}
@@ -23,8 +22,9 @@
 				//if(data.finished) ws.close()
 			};
 			function sendStart(event){
-				var delay = document.getElementById("delay")
-				ws.send(JSON.stringify({action: 'start', delay: parseFloat(delay.value) }))
+				let delay = document.getElementById("delay")
+				let alg = document.querySelector('input[name="alg"]:checked').value;
+				ws.send(JSON.stringify({action: 'start', delay: parseFloat(delay.value), alg: alg }))
 				event.preventDefault()
 
 			}
@@ -40,9 +40,21 @@
 				<form class="w-full flex flex-col space-y-2" action="" onsubmit="sendStart(event)">
 					<div class="w-full flex flex-row justify-center items-center">
 						<p>Delay: </p>
-						<input class="m-1 p-0.5 rounded-md border-2 border-slate-400" type="number" id="delay" value="0.001" min="0" max="50" step="0.0001" required autocomplete="off"/>
+						<input class="m-1 p-0.5 rounded-md border border-slate-500" type="number" id="delay" value="0.001" min="0" max="50" step="0.0001" required autocomplete="off"/>
 					</div>
-					<button>Start</button>
+					<div class="w-full flex flex-row justify-center items-center space-x-3">
+						<div class="flex flex-row items-center space-x-1">
+							<input type="radio" id="depth" name="alg" value="depth" checked />
+							<label for="depth">Depth First Search</label>
+						</div>
+						<div class="flex flex-row items-center space-x-1">
+							<input type="radio" id="best" name="alg" value="best" />
+							<label for="best">Best First Search</label>
+						</div>
+					</div>
+					<div class="w-full flex flex-row justify-center">
+						<button class="border border-slate-600 bg-slate-100 px-2 py-1 rounded">Start</button>
+					</div>
 				</form>
 			</div>
 		</div>
