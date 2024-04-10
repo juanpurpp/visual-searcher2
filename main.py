@@ -5,6 +5,8 @@ from searcher.Searcher import Searcher
 from pybars import Compiler
 from problem import problem
 
+from os import environ
+
 compiler = Compiler()
 
 app = FastAPI()
@@ -28,7 +30,7 @@ def _list(this, options):
 helpers = {'list': _list}
 
 template = compiler.compile(hbs)
-html = template({},helpers=helpers)
+html = template({"api": environ.get("API_URL", "localhost:8000")},helpers=helpers)
 
 
 @app.get("/")

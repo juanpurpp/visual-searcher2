@@ -4,7 +4,7 @@
 		<title>Searcher</title>
 		<script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
 		<script>
-			var ws = new WebSocket("ws://localhost:8000/ws");
+			var ws = new WebSocket("ws://"+'{{api}}'+'/ws');
 			ws.onmessage = function(event) {
 				const data = JSON.parse(JSON.parse(event.data))
 				console.log(data)
