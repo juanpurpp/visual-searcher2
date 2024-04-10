@@ -30,7 +30,7 @@ def _list(this, options):
 helpers = {'list': _list}
 
 template = compiler.compile(hbs)
-html = template({"api": environ.get("API_URL", "localhost:8000")},helpers=helpers)
+html = template({"api": environ.get("API_URL", "ws://localhost:8000")},helpers=helpers)
 
 
 @app.get("/")
