@@ -60,37 +60,37 @@ class Node:
       inserted = False
       for index,listed in enumerate(children):
         if this_choice_distance > listed['distance']:
-          children = children[:index] + [{"coords": up,"distance": this_choice_distance}]+ children[index:]
+          children = children[:index] + [{"coords": up,"distance": this_choice_distance, "dir": 'up'}]+ children[index:]
           inserted = True
-      if len(children) == 0 or not inserted: children.append({"coords": up,"distance": this_choice_distance})
+      if len(children) == 0 or (len(children)>0 and not inserted): children.append({"coords": up,"distance": this_choice_distance, "dir": 'up'})
     #right
     if self.movementDoesntBreakRules(*right):
       inserted = False
       this_choice_distance = self.getDistanceFrom(*right, targetRow, targetCol)
       for index,listed in enumerate(children):
         if this_choice_distance > listed['distance']:
-          children = children[:index] + [ {"coords": right,"distance": this_choice_distance}] + children[index:]
+          children = children[:index] + [ {"coords": right,"distance": this_choice_distance, "dir": 'right'}] + children[index:]
           inserted = True
-      if len(children) == 0 or not inserted: children.append({"coords": right,"distance": this_choice_distance})
+      if len(children) == 0 or (len(children)>0 and not inserted): children.append({"coords": right,"distance": this_choice_distance, "dir": 'right'})
     #down
     if self.movementDoesntBreakRules(*down):
       inserted = False
       this_choice_distance = self.getDistanceFrom(*down, targetRow, targetCol)
       for index,listed in enumerate(children):
         if this_choice_distance > listed['distance']:
-          children = children[:index] + [{"coords": down,"distance": this_choice_distance}] + children[index:]
+          children = children[:index] + [{"coords": down,"distance": this_choice_distance, "dir": 'down'}] + children[index:]
           inserted = True
-      if len(children) == 0 or not inserted: children.append({"coords": down,"distance": this_choice_distance})
+      if len(children) == 0 or (len(children)>0 and not inserted): children.append({"coords": down,"distance": this_choice_distance, "dir": 'down'})
     #left
     if self.movementDoesntBreakRules(*left):
       inserted = False
       this_choice_distance = self.getDistanceFrom(*left, targetRow, targetCol)
       for index,listed in enumerate(children):
         if this_choice_distance > listed['distance']:
-          children = children[:index] + [{"coords": left,"distance": this_choice_distance}] + children[index:]
+          children = children[:index] + [{"coords": left,"distance": this_choice_distance, "dir": 'left'}] + children[index:]
           inserted = True
-      if len(children) == 0 or not inserted: children.append({"coords": left,"distance": this_choice_distance})
-
+      if len(children) == 0 or (len(children)>0 and not inserted): children.append({"coords": left,"distance": this_choice_distance, "dir": 'left'})
+    print('childrens', children)
     children = list(map(lambda choice: choice['coords'], children))
 
     return children
