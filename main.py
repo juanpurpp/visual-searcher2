@@ -51,3 +51,4 @@ async def websocket_endpoint(websocket: WebSocket):
     if data['action'] == 'start':
       if data['alg'] == None or data['alg'] == 'depth': await agent.startDepth(sendIteration, data["delay"])
       elif data['alg'] == 'best': await agent.startBest(sendIteration, data["delay"])
+      elif data['alg'] == 'breadth': await agent.startBreadth(sendIteration, data["delay"])

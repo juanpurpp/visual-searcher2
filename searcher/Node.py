@@ -45,8 +45,6 @@ class Node:
     return (( ( self.row - targetRow)**2 ) + ( (self.col - targetCol)**2 )  )**0.5
 
   def getDistanceFrom (self, row, col, targetRow, targetCol):
-    print('row, col')
-    print(row,col)
     return (( ( row - targetRow )**2 ) + ( ( col - targetCol )**2 )  )**0.5
   
   def getOrderedChoicesByDistanceTo(self, targetRow, targetCol):
@@ -92,7 +90,7 @@ class Node:
           children = children[:index] + [{"coords": left,"distance": this_choice_distance}] + children[index:]
           inserted = True
       if len(children) == 0 or not inserted: children.append({"coords": left,"distance": this_choice_distance})
-      
+
     children = list(map(lambda choice: choice['coords'], children))
 
     return children
