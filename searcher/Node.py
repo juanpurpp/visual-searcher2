@@ -1,3 +1,5 @@
+from functools import cmp_to_key
+
 class Node:
   def __init__(self, problem, row, col, father):
     self.problem = problem
@@ -57,41 +59,22 @@ class Node:
     #up
     if self.movementDoesntBreakRules(*up):
       this_choice_distance = self.getDistanceFrom(*up, targetRow, targetCol)
-      inserted = False
-      for index,listed in enumerate(children):
-        if this_choice_distance > listed['distance']:
-          children = children[:index] + [{"coords": up,"distance": this_choice_distance, "dir": 'up'}]+ children[index:]
-          inserted = True
-      if len(children) == 0 or (len(children)>0 and not inserted): children.append({"coords": up,"distance": this_choice_distance, "dir": 'up'})
+      children.append({"coords": up,"distance": this_choice_distance, "dir": 'up'})
     #right
     if self.movementDoesntBreakRules(*right):
-      inserted = False
       this_choice_distance = self.getDistanceFrom(*right, targetRow, targetCol)
-      for index,listed in enumerate(children):
-        if this_choice_distance > listed['distance']:
-          children = children[:index] + [ {"coords": right,"distance": this_choice_distance, "dir": 'right'}] + children[index:]
-          inserted = True
-      if len(children) == 0 or (len(children)>0 and not inserted): children.append({"coords": right,"distance": this_choice_distance, "dir": 'right'})
+      children.append({"coords": right,"distance": this_choice_distance, "dir": 'right'})
     #down
     if self.movementDoesntBreakRules(*down):
-      inserted = False
       this_choice_distance = self.getDistanceFrom(*down, targetRow, targetCol)
-      for index,listed in enumerate(children):
-        if this_choice_distance > listed['distance']:
-          children = children[:index] + [{"coords": down,"distance": this_choice_distance, "dir": 'down'}] + children[index:]
-          inserted = True
-      if len(children) == 0 or (len(children)>0 and not inserted): children.append({"coords": down,"distance": this_choice_distance, "dir": 'down'})
-    #left
+      children.append({"coords": down,"distance": this_choice_distance, "dir": 'down'} )   #left
     if self.movementDoesntBreakRules(*left):
-      inserted = False
       this_choice_distance = self.getDistanceFrom(*left, targetRow, targetCol)
-      for index,listed in enumerate(children):
-        if this_choice_distance > listed['distance']:
-          children = children[:index] + [{"coords": left,"distance": this_choice_distance, "dir": 'left'}] + children[index:]
-          inserted = True
-      if len(children) == 0 or (len(children)>0 and not inserted): children.append({"coords": left,"distance": this_choice_distance, "dir": 'left'})
-    print('childrens', children)
+      children.append({"coords": left,"distance": this_choice_distance, "dir": 'left'} )     
+    children = sorted(children, key=cmp_to_key(lambda item1, item2: item2['distance']-item1['distance']))
+    print('final coords', children)
     children = list(map(lambda choice: choice['coords'], children))
+
 
     return children
     
