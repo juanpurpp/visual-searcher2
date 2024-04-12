@@ -5,6 +5,8 @@
 		<script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
 		<script>
 			var ws = new WebSocket('{{api}}/ws');
+			
+			addEventListener("load", () => document.getElementById('step').checked =false);
 			ws.onmessage = function(event) {
 				const data = JSON.parse(JSON.parse(event.data))
 				console.log(data)
@@ -17,9 +19,11 @@
 					for(pos of data.path){
 						const pathUnit = document.getElementById(`i-${pos[0]}-${pos[1]}`)
 						const internalPath = document.createElement("div");
-						internalPath.className = 'w-3 h-3 bg-sky-600 rounded'
+						internalPath.className = 'w-3 h-3 bg-cyan-700 rounded-3xl'
 						pathUnit.appendChild(internalPath)
 					}
+					document.getElementById('step-button').disabled = true
+					document.getElementById('start-button').disabled = false
 				}
 				document.getElementById('visited').innerHTML = 'Visited: '+ data.visited
 				document.getElementById('left').innerHTML = 'Left: '+ data.left
@@ -28,11 +32,24 @@
 				//if(data.finished) ws.close()
 			};
 			function sendStart(event){
-				let delay = document.getElementById("delay")
+	
+				let delay = document.getElementById("delay");
 				let alg = document.querySelector('input[name="alg"]:checked').value;
-				ws.send(JSON.stringify({action: 'start', delay: parseFloat(delay.value), alg: alg }))
+				console.log(document.getElementById('step'))
+				let step = document.getElementById('step').checked;
+				ws.send(JSON.stringify({action: 'start', delay: parseFloat(delay.value), alg: alg, stepMode: step}))
 				event.preventDefault()
 
+				document.getElementById('step-button').disabled = false
+				document.getElementById('start-button').disabled = true
+			}
+			function sendNextStep(event){
+				ws.send('next')
+				event.preventDefault()
+			}
+			function onStepModeChange(event){
+				if(event.target.checked) document.getElementById('step-button').className = 'w-full border border-slate-600 bg-slate-100 px-2 py-1 rounded disabled:bg-gray-300 disabled:text-gray-500'
+				else document.getElementById('step-button').className = 'hidden w-full border border-slate-600 bg-slate-100 px-2 py-1 rounded disabled:bg-gray-300 disabled:text-gray-500'
 			}
 		</script>
 	</head>
@@ -46,7 +63,7 @@
 				<form class="w-full flex flex-col space-y-2 justify-start p-4" action="" onsubmit="sendStart(event)">
 					<div class="w-full flex flex-row justify-start items-center">
 						<p>Delay: </p>
-						<input class="m-1 p-0.5 rounded-md border border-slate-500" type="number" id="delay" value="0.005" min="0" max="50" step="0.005" required autocomplete="off"/>
+						<input class="m-1 p-0.5 rounded-md border border-slate-500" type="number" id="delay" value="0.005" min="0" max="50" step="0.005" required/>
 					</div>
 					<div class="w-full flex flex-row justify-start items-center space-x-3">
 						<div class="flex flex-row items-center space-x-1">
@@ -62,8 +79,12 @@
 							<label for="best">Best First Search</label>
 						</div>
 					</div>
-					<div class="w-full flex flex-row justify-center mt-32">
-						<button class="w-full border border-slate-600 bg-slate-100 px-2 py-1 rounded mt-4">Start</button>
+					<div>
+						<input autocomplete="off" onchange="onStepModeChange(event)" class="rounded-md" type="checkbox" id="step" checked="false"> Step by step mode </input>
+					</div>
+					<div class="w-full flex flex-col justify-center mt-32 space-y-1">
+						<button id="start-button" class="w-full border border-slate-600 bg-slate-100 px-2 py-1 rounded disabled:bg-gray-300 disabled:text-gray-500">Start</button>
+						<button disabled id="step-button" type="button" onclick="sendNextStep(event)" class="hidden w-full border border-slate-600 bg-slate-100 px-2 py-1 rounded disabled:bg-gray-300 disabled:text-gray-500">Next Step</button>
 					</div>
 					<div class="w-full flex flex-col ">
 						<p class="font-semibold"> Results: </p>

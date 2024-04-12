@@ -44,13 +44,14 @@ async def websocket_endpoint(websocket: WebSocket):
 
   await websocket.accept()
 
-  async def sendIteration(response):
-    await websocket.send_json(response)
-
   while True:
     data = await websocket.receive_json()
     print(data)
     if data['action'] == 'start':
+      async def sendIteration(response):
+        await websocket.send_json(response)
+        if data['stepMode'] == True:
+          while (await websocket.receive_text()) != 'next': pass;
       if data['alg'] == None or data['alg'] == 'depth': await agent.startDepth(sendIteration, data["delay"])
       elif data['alg'] == 'best': await agent.startBest(sendIteration, data["delay"])
       elif data['alg'] == 'breadth': await agent.startBreadth(sendIteration, data["delay"])

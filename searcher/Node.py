@@ -72,7 +72,6 @@ class Node:
       this_choice_distance = self.getDistanceFrom(*left, targetRow, targetCol)
       children.append({"coords": left,"distance": this_choice_distance, "dir": 'left'} )     
     children = sorted(children, key=cmp_to_key(lambda item1, item2: item2['distance']-item1['distance']))
-    print('final coords', children)
     children = list(map(lambda choice: choice['coords'], children))
 
 
