@@ -53,7 +53,6 @@ class Searcher:
       if(current.isGoal()): path = current.getPathToStart()
 
       await onIteration(
-        json.dumps(
           {
             "row":new_row,
             "col": new_col,
@@ -67,7 +66,6 @@ class Searcher:
             "time": time.time() - init,
             "choices": [choice.getState() for choice in choices]
           }
-        )
       )
   async def startLinearBest(self, onIteration, delay=0.2):
     iterations = 0
@@ -92,7 +90,6 @@ class Searcher:
       path = []
       if(current.isGoal()): path = current.getPathToStart()
       await onIteration(
-        json.dumps(
           {
             "row":new_row,
             "col": new_col,
@@ -106,7 +103,6 @@ class Searcher:
             "time": time.time() - init,
             "choices": [choice.getState() for choice in choices]
           }
-        )
       )
 
 
@@ -138,7 +134,6 @@ class Searcher:
       if(current.isGoal()): path = current.getPathToStart()
 
       await onIteration(
-        json.dumps(
           {
             "row":new_row,
             "col": new_col,
@@ -152,7 +147,6 @@ class Searcher:
             "time": time.time() - init,
             "choices": [choice.getState() for choice in choices]
           }
-        )
       )
 
   async def startDepth(self, onIteration, delay,):

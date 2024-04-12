@@ -9,7 +9,7 @@
 			
 			addEventListener("load", () => document.getElementById('step').checked =false);
 			ws.onmessage = function(event) {
-				const data = JSON.parse(JSON.parse(event.data))
+				const data = JSON.parse(event.data)
 				console.log(data)
 				const newPos = document.getElementById(`i-${data.row}-${data.col}`)
 				const oldPos = document.getElementById(`i-${data.oldRow}-${data.oldCol}`)
