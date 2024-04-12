@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<title>Searcher</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">s
 		<script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
 		<script>
 			var ws = new WebSocket('{{api}}/ws');
@@ -57,7 +58,7 @@
 			}
 		</script>
 	</head>
-	<body>
+	<body class="flex flex-col justify-between h-screen">
 		<div class="w-screen flex flex-col justify-start items-center">
 			<h1 class="text-2xl text-slate-700 font-semibold">Visual Maze Solution Searcher v2 by Juanpurpp</h1>
 			<div class="w-full flex flex-row p-4">
@@ -97,16 +98,21 @@
 					<div class="w-full flex flex-col ">
 						<p class="font-semibold"> Results: </p>
 						<div class="w-full flex flex-row justify-stretch text-sm px-4">
-							<p id="visited" class="w-full">Visited: </p>
-							<p id="left" class="w-full">Left: </p>
+							<p title="Both iterations and choices that were not checked" id="visited" class="w-full">Visited: </p>
+							<p title="Yellow ones, choices that were not checked" id="left" class="w-full">Left: </p>
 						</div>
 						<div class="w-full flex flex-row justify-stretch text-sm px-4">
-							<p id="iterations" class="w-full">Iterations: </p>
-							<p id="time" class="w-full">Time: </p>
+							<p title="Purple ones, places that our agent already checked options" id="iterations" class="w-full">Iterations: </p>
+							<p title="Time of execution" id="time" class="w-full">Time: </p>
 						</div>
 					</div>
 				</form>
 			</div>
 		</div>
+		<footer class="w-full flex flex-row space-x-1 justify-center items-center text-sm font-light text-slate-600 bg-slate-50">
+			<i class="fa fa-github"></i>
+			<p class="mr-1" >Github: </p>
+  		<a class="text-blue-600" target="_blank" href="https://github.com/juanpurpp/visual-searcher2">Project repository</a>
+		</footer>
 	</body>
 </html>
