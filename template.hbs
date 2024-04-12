@@ -83,8 +83,12 @@
 							<label for="best">Best First Search</label>
 						</div>
 					</div>
-					<div>
-						<input autocomplete="off" onchange="onStepModeChange(event)" class="rounded-md" type="checkbox" id="step" checked="false"> Step by step mode </input>
+					<div class="w-full">
+						<div class="flex flex-row items-center space-x-1">
+							<input autocomplete="off" onchange="onStepModeChange(event)" class="rounded-md" type="checkbox" id="step" checked="false"/>
+							<label for="step">Activate step by step mode</label>
+						</div>
+						
 					</div>
 					<div class="w-full flex flex-col justify-center mt-32 space-y-1">
 						<button id="start-button" class="w-full border border-slate-600 bg-slate-100 px-2 py-1 rounded disabled:bg-gray-300 disabled:text-gray-500">Start</button>
