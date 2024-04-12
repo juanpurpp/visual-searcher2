@@ -40,11 +40,13 @@ class Searcher:
       iterations+=1
       oldRow, oldCol = current.getState()
       await sleep(delay)
-      for choice in current.getChoices():
-        new_node = Node(self.problem, choice[0], choice[1], current)
-        if not self.isSaved(saved,new_node) :
-          saved.append(new_node) 
-          stack.append(new_node)
+      choices = current.getChoices()
+      choices = [Node(self.problem, choice[0], choice[1], current) for choice in choices]
+      choices = list(filter(lambda choice: not self.isSaved(saved,choice), choices ))
+      for choice in choices:
+        saved.append(choice) 
+        stack.append(choice)
+
       current = stack.pop()
       new_row, new_col = current.getState()
       path = []
@@ -63,6 +65,7 @@ class Searcher:
             "left": len(stack),
             "iterations": iterations,
             "time": time.time() - init,
+            "choices": [choice.getState() for choice in choices]
           }
         )
       )
@@ -78,11 +81,12 @@ class Searcher:
       iterations+=1
       oldRow, oldCol = current.getState()
       await sleep(delay)
-      for choice in current.getOrderedChoicesByDistanceTo(self.goalRow, self.goalCol):
-        new_node = Node(self.problem, choice[0], choice[1], current)
-        if not self.isSaved(saved,new_node) :
-          saved.append(new_node) 
-          stack.append(new_node)
+      choices = current.getOrderedChoicesByDistanceTo(self.goalRow, self.goalCol)
+      choices = [Node(self.problem, choice[0], choice[1], current) for choice in choices]
+      choices = list(filter(lambda choice: not self.isSaved(saved,choice), choices ))
+      for choice in choices:
+          saved.append(choice) 
+          stack.append(choice)
       current = stack.pop()
       new_row, new_col = current.getState()
       path = []
@@ -100,6 +104,7 @@ class Searcher:
             "left": len(stack),
             "iterations": iterations,
             "time": time.time() - init,
+            "choices": [choice.getState() for choice in choices]
           }
         )
       )
@@ -115,15 +120,17 @@ class Searcher:
     row_num, col_num = self.getInitialPos()
 
     current = Node(self.problem, row_num, col_num, None)
+
     while not current.isGoal():
       iterations+=1
       oldRow, oldCol = current.getState()
       await sleep(delay)
-      for choice in current.getChoices():
-        new_node = Node(self.problem, choice[0], choice[1], current)
-        if not self.isSaved(saved,new_node): 
-          saved.append(new_node) 
-          queue.append(new_node)
+      choices = current.getChoices()
+      choices = [Node(self.problem, choice[0], choice[1], current) for choice in choices]
+      choices = list(filter(lambda choice: not self.isSaved(saved,choice), choices ))
+      for choice in choices:
+        saved.append(choice) 
+        queue.append(choice)
 
       current = queue.pop(0)
       new_row, new_col = current.getState()
@@ -143,6 +150,7 @@ class Searcher:
             "left": len(queue),
             "iterations": iterations,
             "time": time.time() - init,
+            "choices": [choice.getState() for choice in choices]
           }
         )
       )

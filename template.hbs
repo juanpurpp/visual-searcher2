@@ -12,6 +12,10 @@
 				console.log(data)
 				const newPos = document.getElementById(`i-${data.row}-${data.col}`)
 				const oldPos = document.getElementById(`i-${data.oldRow}-${data.oldCol}`)
+				for (choice of data.choices){
+					const choiceBlock = document.getElementById(`i-${choice[0]}-${choice[1]}`)
+					choiceBlock.className='w-4 h-4 bg-amber-200 flex justify-center items-center'
+				}
 				newPos.className= data.finished ? 'w-4 h-4 bg-blue-700' : 'w-4 h-4 bg-blue-400'
 				if(oldPos) oldPos.className='w-4 h-4 bg-violet-200 flex justify-center items-center'
 				if(data.finished == true){
