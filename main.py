@@ -3,8 +3,8 @@ from fastapi.responses import HTMLResponse
 
 from searcher.Searcher import Searcher
 from pybars import Compiler
-from problem import problem
-
+#from problem import problem
+from largeProblems import problem
 from os import environ
 
 compiler = Compiler()
