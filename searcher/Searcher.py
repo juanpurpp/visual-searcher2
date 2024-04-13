@@ -23,19 +23,19 @@ class Searcher:
   
   def isSaved(self, saved, state):
     for old in saved:
-      old_state = old.getState()
-      state_state = state.getState()
-      if old_state[0] == state_state[0] and old_state[1] == state_state[1]: return True
+      if old.getState() == state.getState(): return True
     return False
 
   async def startLinearDepth(self, onIteration, delay=0.2):
-    iterations = 0
-    stack = []
-    saved = []
-    init = time.time()
-    row_num, col_num = self.getInitialPos()
+    iterations = 1
 
+    row_num, col_num = self.getInitialPos()
     current = Node(self.problem, row_num, col_num, None)
+    stack = []
+    saved = [current]
+    init = time.time()
+
+    
     while not current.isGoal():
       iterations+=1
       oldRow, oldCol = current.getState()
@@ -64,17 +64,19 @@ class Searcher:
             "left": len(stack),
             "iterations": iterations,
             "time": time.time() - init,
-            "choices": [choice.getState() for choice in choices]
+            "choices": [choice.getState() for choice in choices],
+            "current_depth": current.getDepth()
           }
       )
   async def startLinearBest(self, onIteration, delay=0.2):
-    iterations = 0
-    stack = []
-    saved = []
-    init = time.time()
-    row_num, col_num = self.getInitialPos()
+    iterations = 1
 
-    current = Node(self.problem, row_num, col_num, None)
+    row_num, col_num = self.getInitialPos()
+    current = Node(self.problem, row_num, col_num, None) #Setting first iteration with node as initial positicion
+    stack = []
+    saved = [current]
+    init = time.time()
+
     while not current.isGoal():
       iterations+=1
       oldRow, oldCol = current.getState()
@@ -101,7 +103,8 @@ class Searcher:
             "left": len(stack),
             "iterations": iterations,
             "time": time.time() - init,
-            "choices": [choice.getState() for choice in choices]
+            "choices": [choice.getState() for choice in choices],
+            "current_depth": current.getDepth()
           }
       )
 
@@ -109,13 +112,14 @@ class Searcher:
 
     ### BREADTH FIRST SEARCH
   async def startLinearBreadth(self, onIteration, delay=0.2):
-    iterations = 0
-    queue = []
-    saved = []
-    init = time.time()
+    iterations = 1
     row_num, col_num = self.getInitialPos()
-
     current = Node(self.problem, row_num, col_num, None)
+    queue = []
+    saved = [current]
+    init = time.time()
+
+
 
     while not current.isGoal():
       iterations+=1
@@ -145,7 +149,8 @@ class Searcher:
             "left": len(queue),
             "iterations": iterations,
             "time": time.time() - init,
-            "choices": [choice.getState() for choice in choices]
+            "choices": [choice.getState() for choice in choices],
+            "current_depth": current.getDepth()
           }
       )
 

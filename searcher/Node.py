@@ -6,6 +6,10 @@ class Node:
     self.row = row
     self.col = col
     self.father = father
+    self.depth = 0 if father is None else father.getDepth()+1
+
+  def getDepth(self):
+    return self.depth
 
   def getState(self):
     return [self.row, self.col]
