@@ -2,11 +2,16 @@
 <html>
 	<head>
 		<title>Searcher</title>
+    <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script> 
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
 		<script>
+			var colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff8000', '#800080']
+			var myChart = undefined
 			var ws = new WebSocket('{{api}}/ws');
-			
+			var results = []
+			var algsTried = []
+			var startMaze =document.getElementById('maze')
 			addEventListener("load", () => document.getElementById('step').checked =false);
 			ws.onmessage = function(event) {
 				const data = JSON.parse(event.data)
@@ -30,24 +35,66 @@
 					document.getElementById('step-button').disabled = true
 					document.getElementById('start-button').disabled = false
 				}
+				results[results.length-1].push(data.iterations+data.left)
 				document.getElementById('visited').innerHTML = 'Visited: '+ data.visited
 				document.getElementById('left').innerHTML = 'Left: '+ data.left
 				document.getElementById('iterations').innerHTML = 'Iterations: '+ data.iterations
 				document.getElementById('time').innerHTML = 'Time: '+ data.time
 				document.getElementById('depth-level').innerHTML = 'Depth level: '+ data.current_depth
+
+				if (typeof(this.myChart) != "undefined") {
+            this.myChart.destroy();
+        }
+				this.myChart = new Chart(
+					document.getElementById('benchmarks').getContext('2d'),
+					{
+						type: 'line',
+						options: {
+							animation: false,
+							plugins: {
+								legend: {
+									display: false
+								},
+								tooltip: {
+									enabled: false
+								}
+							}
+						},
+						data: {
+							labels: Array.from(Array(Math.max(...results.map(res=>res.length))).keys()),
+							datasets: results.map((set, index)=>(
+								
+								{
+									label: algsTried[index],
+									data: set,
+									borderColor: colors[index],
+									fill: false,
+								}
+							
+							))
+						}
+					}
+				);
+
 				//if(data.finished) ws.close()
 			};
 			function sendStart(event){
-	
+				results.push(([]))
+				if (this.startMaze == null) {
+          this.startMaze = structuredClone(document.getElementById('maze').innerHTML)
+        }
+				document.getElementById('maze').innerHTML = this.startMaze
 				let delay = document.getElementById("delay");
 				let alg = document.querySelector('input[name="alg"]:checked').value;
 				console.log(document.getElementById('step'))
 				let step = document.getElementById('step').checked;
+				algsTried.push(alg)
 				ws.send(JSON.stringify({action: 'start', delay: parseFloat(delay.value), alg: alg, stepMode: step}))
 				event.preventDefault()
 
 				document.getElementById('step-button').disabled = false
 				document.getElementById('start-button').disabled = true
+				
 			}
 			function sendNextStep(event){
 				ws.send('next')
@@ -109,6 +156,7 @@
 								<p title="Time of execution" id="time" class="w-full">Time: </p>
 							</div>
 						</div>
+						<canvas id="benchmarks"></canvas>
 					</div>
 				</form>
 			</div>
