@@ -26,7 +26,7 @@ class Searcher:
       if old.getState() == state.getState(): return True
     return False
 
-  async def startLinearDepth(self, onIteration, delay=0.2):
+  async def startLinearDepth(self, onIteration, delay=0):
     iterations = 1
 
     row_num, col_num = self.getInitialPos()
@@ -53,22 +53,22 @@ class Searcher:
       if(current.isGoal()): path = current.getPathToStart()
 
       await onIteration(
-          {
-            "row":new_row,
-            "col": new_col,
-            "oldRow": oldRow,
-            "oldCol": oldCol,
-            "finished": current.isGoal(),
-            "path": path,
-            "visited": len(saved),
-            "left": len(stack),
-            "iterations": iterations,
-            "time": time.time() - init,
-            "choices": [choice.getState() for choice in choices],
-            "current_depth": current.getDepth()
-          }
+        {
+          "row":new_row,
+          "col": new_col,
+          "oldRow": oldRow,
+          "oldCol": oldCol,
+          "finished": current.isGoal(),
+          "path": path,
+          "visited": len(saved),
+          "left": len(stack),
+          "iterations": iterations,
+          "time": (time.time() - init),
+          "choices": [choice.getState() for choice in choices],
+          "current_depth": current.getDepth()
+        }
       )
-  async def startLinearBest(self, onIteration, delay=0.2):
+  async def startLinearBest(self, onIteration, delay=0):
     iterations = 1
 
     row_num, col_num = self.getInitialPos()
@@ -85,33 +85,33 @@ class Searcher:
       choices = [Node(self.problem, choice[0], choice[1], current) for choice in choices]
       choices = list(filter(lambda choice: not self.isSaved(saved,choice), choices ))
       for choice in choices:
-          saved.append(choice) 
-          stack.append(choice)
+        saved.append(choice) 
+        stack.append(choice)
       current = stack.pop()
       new_row, new_col = current.getState()
       path = []
       if(current.isGoal()): path = current.getPathToStart()
       await onIteration(
-          {
-            "row":new_row,
-            "col": new_col,
-            "oldRow": oldRow,
-            "oldCol": oldCol,
-            "finished": current.isGoal(),
-            "path": path,
-            "visited": len(saved),
-            "left": len(stack),
-            "iterations": iterations,
-            "time": time.time() - init,
-            "choices": [choice.getState() for choice in choices],
-            "current_depth": current.getDepth()
-          }
+        {
+          "row":new_row,
+          "col": new_col,
+          "oldRow": oldRow,
+          "oldCol": oldCol,
+          "finished": current.isGoal(),
+          "path": path,
+          "visited": len(saved),
+          "left": len(stack),
+          "iterations": iterations,
+          "time": time.time() - init,
+          "choices": [choice.getState() for choice in choices],
+          "current_depth": current.getDepth()
+        }
       )
 
 
 
     ### BREADTH FIRST SEARCH
-  async def startLinearBreadth(self, onIteration, delay=0.2):
+  async def startLinearBreadth(self, onIteration, delay=0):
     iterations = 1
     row_num, col_num = self.getInitialPos()
     current = Node(self.problem, row_num, col_num, None)
@@ -138,20 +138,20 @@ class Searcher:
       if(current.isGoal()): path = current.getPathToStart()
 
       await onIteration(
-          {
-            "row":new_row,
-            "col": new_col,
-            "oldRow": oldRow,
-            "oldCol": oldCol,
-            "finished": current.isGoal(),
-            "path": path,
-            "visited": len(saved),
-            "left": len(queue),
-            "iterations": iterations,
-            "time": time.time() - init,
-            "choices": [choice.getState() for choice in choices],
-            "current_depth": current.getDepth()
-          }
+        {
+          "row":new_row,
+          "col": new_col,
+          "oldRow": oldRow,
+          "oldCol": oldCol,
+          "finished": current.isGoal(),
+          "path": path,
+          "visited": len(saved),
+          "left": len(queue),
+          "iterations": iterations,
+          "time": time.time() - init,
+          "choices": [choice.getState() for choice in choices],
+          "current_depth": current.getDepth()
+        }
       )
 
   async def startDepth(self, onIteration, delay,):

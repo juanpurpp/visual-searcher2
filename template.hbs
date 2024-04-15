@@ -6,7 +6,7 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
 		<script>
-			var colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff8000', '#800080']
+			var colors = ['#ffcccc', '#ccffcc', '#ccccff', '#ffffcc', '#ffccff', '#ccffff', '#ffcc99', '#cc99cc']
 			var myChart = undefined
 			var ws = new WebSocket('{{api}}/ws');
 			var results = []
@@ -35,7 +35,7 @@
 					document.getElementById('step-button').disabled = true
 					document.getElementById('start-button').disabled = false
 				}
-				results[results.length-1].push(data.iterations+data.left)
+				results[results.length-1].push(data.left + data.visited)
 				document.getElementById('visited').innerHTML = 'Visited: '+ data.visited
 				document.getElementById('left').innerHTML = 'Left: '+ data.left
 				document.getElementById('iterations').innerHTML = 'Iterations: '+ data.iterations
@@ -116,7 +116,7 @@
 				<form class="w-full flex flex-col space-y-2 justify-start p-4" action="" onsubmit="sendStart(event)">
 					<div class="w-full flex flex-row justify-start items-center">
 						<p>Delay: </p>
-						<input class="m-1 p-0.5 rounded-md border border-slate-500" type="number" id="delay" value="0.005" min="0" max="50" step="0.005" required/>
+						<input class="m-1 p-0.5 rounded-md border border-slate-500" type="number" id="delay" value="0.005" min="0" max="50" step="0.005" autocomplete="on" required/>
 					</div>
 					<div class="w-full flex flex-row justify-start items-center space-x-3">
 						<div class="flex flex-row items-center space-x-1">
