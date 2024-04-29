@@ -29,6 +29,7 @@ Now port 8000 should be executing the backend, you can get the frontend going to
 
 **Note** Notice too that you can run a production execution running the dockerfile, if you need to change the port (for example in case that you have to expose default http port like 80), i recommend using --port cmd or changing the port in dockerfile in case that you are using docker
 
+You can change the maze problem changing the var problem in main.py, using a matrix format for the maze, where 1 are valid paths and 0 are blocks.
 ## Demo
 
 <a href="https://p02--visual-searcher-2--f4p8zgqlvr7n.code.run/" target="_blank">Live demo is available</a> using deployment service of nortflank.
