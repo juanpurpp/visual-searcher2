@@ -22,7 +22,7 @@ Instructions:
 
 1. built venv ```python3 -m venv venv``` o ```python -m venv venv```
 2. select venv interpreter ```source venv/bin/activate``` in Mac or Linux and ```.\venv\Scripts\activate``` in Windows
-3. install dependencies ```pip install -r requirements.txt``` o ```pip3 install -r requirements.txt```
+3. install dependencies ```pip install fastapi uvicorn['standard'] pybars3``` o ```pip install -r requirements.txt```
 4. run uvicorn ```uvicorn main:app --reload```
 
 Now port 8000 should be executing the backend, you can get the frontend going to ```localhost:8000``` in web browser
